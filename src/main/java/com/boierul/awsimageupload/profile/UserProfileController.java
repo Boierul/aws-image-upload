@@ -10,6 +10,8 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/user-profile")
+@CrossOrigin("*")
+// In production, we would want to restrict the origins that can access our API
 public class UserProfileController {
 
     private final UserProfileService userProfileService;

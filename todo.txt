@@ -1,0 +1,5 @@
+To be done:
+
+- Beautify the frontend in React.js
+- Docker containerize the app (both frontend and backend)
+- Deploy the Vercel frontend/backend as micriservices

@@ -29,19 +29,19 @@ public class UserProfileService {
     }
 
     public void uploadUserProfileImage(UUID userProfileId, MultipartFile file) {
-        // 1. Check if image is not empty
+        // Check if image is not empty
         isFileEmpty(file);
 
-        // 2. If file is an image
+        // If file is an image
         isImage(file);
 
-        // 3. The user exists in our database
+        // The user exists in our database
         UserProfile user = getUserProfileOrThrow(userProfileId);
 
-        // 4. Grab some metadata from file if any
+        // Grab some metadata from file if any
         Map<String, String> metadata = extractMetadata(file);
 
-        // 5. Store the image in s3 and update database (userProfileImageLink) with s3 image link
+        // Store the image in s3 and update database (userProfileImageLink) with s3 image link
         String path = String.format("%s/%s", BucketName.PROFILE_IMAGE.getBucketName(), user.getUserProfileId());
         String filename = String.format("%s-%s", file.getOriginalFilename(), UUID.randomUUID());
 
@@ -88,6 +88,7 @@ public class UserProfileService {
     public byte[] downloadUserProfileImage(UUID userProfileId) {
         UserProfile user = getUserProfileOrThrow(userProfileId);
 
+        //  Set the path in a String variable
         String path = String.format("%s/%s",
                 BucketName.PROFILE_IMAGE.getBucketName(),
                 user.getUserProfileId());

@@ -9,25 +9,29 @@ const UserProfiles = () => {
     const fetchUserProfiles = () => {
         axios.get("http://localhost:8080/api/v1/user-profile")
             .then((res) => {
-                console.log(res);
                 setUserProfiles(res.data);
+
             });
     }
 
     useEffect(() => {
             fetchUserProfiles();
         },
-        []);
+        [userProfiles]);
 
     return userProfiles.map((userProfile, index) => {
         return (
             <div key={index} className="container">
-                <br/>
+                {userProfile.userProfileId
+                    ? <img className="container-image" alt="profile-img"
+                           src={`http://localhost:8080/api/v1/user-profile/${userProfile.userProfileId}/image/download`}/>
+                    :
+                    null}
                 <br/>
                 <h1>{userProfile.username}</h1>
                 <p>{userProfile.userProfileId}</p>
                 <div className="dropzone">
-                    <Dropzone/>
+                    <Dropzone {...userProfile}/>
                 </div>
                 <br/>
             </div>
@@ -35,16 +39,17 @@ const UserProfiles = () => {
     })
 }
 
-function Dropzone() {
+function Dropzone({userProfileId}) {
     const onDrop = useCallback(acceptedFiles => {
         // Select the first file
         const file = acceptedFiles[0];
 
-        // Create a form data object
+        // Create a form data object to send the file to the server
         const formData = new FormData();
+        // Add the file to the form data
         formData.append("file", file);
 
-        axios.post("http://localhost:8080/api/v1/user-profile/image/upload", formData, {
+        axios.post(`http://localhost:8080/api/v1/user-profile/${userProfileId}/image/upload`, formData, {
             headers: {
                 "Content-Type": "multipart/form-data"
             }
